@@ -89,7 +89,7 @@ for path in EVALS.iterdir():
         all_stats[name].append(stats)
 
 metrics = [tt.leaf("score", ".2f"), tt.leaf("std", ".2f")]
-sources = ["drums", "bass", "other", "vocals"]
+sources = ["accompaniment", "vocals"]
 
 mytable = tt.table([tt.leaf("name"), tt.group("all", metrics + [tt.leaf("count")])] +
                    [tt.group(source, metrics) for idx, source in enumerate(sources)])

@@ -35,7 +35,7 @@ def evaluate(model,
     on a single GPU, the bottleneck being the call to museval.
     """
 
-    source_names = ["drums", "bass", "other", "vocals"]
+    source_names = ["accompaniment", "vocals"]
     output_dir = eval_folder / "results"
     output_dir.mkdir(exist_ok=True, parents=True)
     json_folder = eval_folder / "results/test"
