@@ -97,8 +97,6 @@ mytable = tt.table([tt.leaf("name"), tt.group("all", metrics + [tt.leaf("count")
 lines = []
 for name, stats in all_stats.items():
     line = {"name": name}
-    if 'accompaniment' in stats:
-        del stats['accompaniment']
     alls = []
     for source in sources:
         stat = [np.nanmedian(s[source]) for s in stats]
@@ -127,9 +125,7 @@ if args.latex:
         cols = [
             line['name'],
             latex_number(line["all"]),
-            latex_number(line["drums"]),
-            latex_number(line["bass"]),
-            latex_number(line["other"]),
+            latex_number(line["accompaniment"]),
             latex_number(line["vocals"])
         ]
         print(" & ".join(cols) + r" \\")

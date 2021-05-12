@@ -238,18 +238,18 @@ def main():
 
     for epoch in range(len(saved.metrics), args.epochs):
         begin = time.time()
-        model.train()
-        train_loss, model_size = train_model(
-            epoch, train_set, dmodel, criterion, optimizer, augment,
-            quantizer=quantizer,
-            batch_size=args.batch_size,
-            device=device,
-            repeat=args.repeat,
-            seed=args.seed,
-            diffq=args.diffq,
-            workers=args.workers,
-            world_size=args.world_size)
-        model.eval()
+        # model.train()
+        # train_loss, model_size = train_model(
+        #     epoch, train_set, dmodel, criterion, optimizer, augment,
+        #     quantizer=quantizer,
+        #     batch_size=args.batch_size,
+        #     device=device,
+        #     repeat=args.repeat,
+        #     seed=args.seed,
+        #     diffq=args.diffq,
+        #     workers=args.workers,
+        #     world_size=args.world_size)
+        # model.eval()
         valid_loss = validate_model(
             epoch, valid_set, model, criterion,
             device=device,

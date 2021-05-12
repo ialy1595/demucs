@@ -6,6 +6,8 @@
 
 import sys
 
+import numpy as np
+
 import tqdm
 import torch as th
 from torch.utils.data import DataLoader
@@ -119,13 +121,16 @@ def validate_model(epoch,
         streams = dataset[index]
         # first five minutes to avoid OOM on --upsample models
         streams = streams[..., :15_000_000]
+        accomp = np.add(np.add(streams[1], streams[2]), streams[3]).reshape(1, 2, -1)
+        voc = streams[4].reshape(1, 2, -1)
+        sourc = np.append(accomp, voc, axis=0)
         streams = streams.to(device)
-        sources = streams[1:]
-        mix = streams[0]
-        estimates = apply_model(model, mix, shifts=shifts, split=split, overlap=overlap)
-        loss = criterion(estimates, sources)
+        # sourc = streams[1:]
+        mixx = streams[0]
+        estimates = apply_model(model, mixx, shifts=shifts, split=split, overlap=overlap)
+        loss = criterion(estimates, sourc)
         current_loss += loss.item() / len(indexes)
-        del estimates, streams, sources
+        del estimates, streams, sourc, accomp, voc, mixx
 
     if world_size > 1:
         current_loss = average_metric(current_loss, len(indexes))
