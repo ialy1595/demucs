@@ -186,7 +186,7 @@ def main():
         # tempo change.
         samples = math.ceil(samples / (1 - 0.01 * args.max_tempo))
 
-    sources = 2
+    sources = 1
     if args.raw:
         train_set = Rawset(args.raw / "train",
                            samples=samples,

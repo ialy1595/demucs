@@ -43,7 +43,7 @@ def rescale_module(module, reference):
 class Demucs(nn.Module):
     @capture_init
     def __init__(self,
-                 sources=2,
+                 sources=1,
                  audio_channels=2,
                  channels=64,
                  depth=6,

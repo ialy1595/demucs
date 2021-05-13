@@ -89,7 +89,7 @@ for path in EVALS.iterdir():
         all_stats[name].append(stats)
 
 metrics = [tt.leaf("score", ".2f"), tt.leaf("std", ".2f")]
-sources = ["accompaniment", "vocals"]
+sources = ["accompaniment"]
 
 mytable = tt.table([tt.leaf("name"), tt.group("all", metrics + [tt.leaf("count")])] +
                    [tt.group(source, metrics) for idx, source in enumerate(sources)])
@@ -125,8 +125,7 @@ if args.latex:
         cols = [
             line['name'],
             latex_number(line["all"]),
-            latex_number(line["accompaniment"]),
-            latex_number(line["vocals"])
+            latex_number(line["accompaniment"])
         ]
         print(" & ".join(cols) + r" \\")
 else:
