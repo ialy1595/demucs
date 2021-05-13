@@ -28,7 +28,7 @@ from .test import evaluate
 from .train import train_model, validate_model
 from .utils import (human_seconds, load_model, save_model, get_state,
                     save_state, sizeof_fmt, get_quantizer)
-
+import wandb
 
 @dataclass
 class SavedState:
@@ -43,6 +43,8 @@ def main():
     args = parser.parse_args()
     name = get_name(parser, args)
     print(f"Experiment {name}")
+
+    wandb.init(project="demucs-accomp")
 
     if args.musdb is None and args.rank == 0:
         print(
@@ -238,18 +240,18 @@ def main():
 
     for epoch in range(len(saved.metrics), args.epochs):
         begin = time.time()
-        # model.train()
-        # train_loss, model_size = train_model(
-        #     epoch, train_set, dmodel, criterion, optimizer, augment,
-        #     quantizer=quantizer,
-        #     batch_size=args.batch_size,
-        #     device=device,
-        #     repeat=args.repeat,
-        #     seed=args.seed,
-        #     diffq=args.diffq,
-        #     workers=args.workers,
-        #     world_size=args.world_size)
-        # model.eval()
+        model.train()
+        train_loss, model_size = train_model(
+            epoch, train_set, dmodel, criterion, optimizer, augment,
+            quantizer=quantizer,
+            batch_size=args.batch_size,
+            device=device,
+            repeat=args.repeat,
+            seed=args.seed,
+            diffq=args.diffq,
+            workers=args.workers,
+            world_size=args.world_size)
+        model.eval()
         valid_loss = validate_model(
             epoch, valid_set, model, criterion,
             device=device,
@@ -257,6 +259,8 @@ def main():
             split=args.split_valid,
             overlap=args.overlap,
             world_size=args.world_size)
+
+        wandb.log({"train_loss": train_loss, "valid_loss": valid_loss})
 
         ms = 0
         cms = 0
@@ -294,6 +298,8 @@ def main():
               f"train={train_loss:.8f} valid={valid_loss:.8f} best={best_loss:.4f} ms={ms:.2f}MB "
               f"cms={cms:.2f}MB "
               f"duration={human_seconds(duration)}")
+
+    wandb.finish()
 
     del dmodel
     model.load_state_dict(saved.best_state)

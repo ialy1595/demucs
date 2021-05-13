@@ -1,0 +1,30 @@
+{
+    "os": "Linux-3.10.0-1160.21.1.el7.x86_64-x86_64-with-glibc2.10",
+    "python": "3.8.10",
+    "heartbeatAt": "2021-05-12T08:00:36.768735",
+    "startedAt": "2021-05-12T08:00:35.738540",
+    "docker": null,
+    "gpu": "Tesla V100-PCIE-32GB",
+    "gpu_count": 1,
+    "cpu_count": 56,
+    "cuda": null,
+    "args": [
+        "-b",
+        "16",
+        "--musdb",
+        "../../data/musdb/",
+        "--epochs=20"
+    ],
+    "state": "running",
+    "program": "/demucs/demucs/__main__.py",
+    "codePath": "demucs/__main__.py",
+    "git": {
+        "remote": "https://github.com/ialy1595/demucs.git",
+        "commit": "eae43527a48f38dbd7cd9a44bd7c701c918c8049"
+    },
+    "email": "ialy12006@gmail.com",
+    "root": "/demucs",
+    "host": "0334cbcf7002",
+    "username": "root",
+    "executable": "/opt/conda/envs/demucs/bin/python3"
+}

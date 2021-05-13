@@ -124,8 +124,8 @@ def validate_model(epoch,
         accomp = np.add(np.add(streams[1], streams[2]), streams[3]).reshape(1, 2, -1)
         voc = streams[4].reshape(1, 2, -1)
         sourc = np.append(accomp, voc, axis=0)
+        sourc = th.from_numpy(sourc).to(device)
         streams = streams.to(device)
-        # sourc = streams[1:]
         mixx = streams[0]
         estimates = apply_model(model, mixx, shifts=shifts, split=split, overlap=overlap)
         loss = criterion(estimates, sourc)

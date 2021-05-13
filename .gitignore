@@ -8,7 +8,6 @@ Session.vim
 /checkpoints
 /logs
 /models
-/evals
 /notebooks
 /separated
 /metadata
