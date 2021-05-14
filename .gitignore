@@ -5,7 +5,6 @@ __pycache__
 Session.vim
 *.log
 /trash
-/checkpoints
 /logs
 /models
 /notebooks
@@ -13,3 +12,4 @@ Session.vim
 /metadata
 /etc
 /wandb
+/checkpoints

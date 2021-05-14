@@ -227,6 +227,7 @@ def temp_filenames(count, delete=True):
 
 def get_quantizer(model, args, optimizer=None):
     quantizer = None
+    return None
     if args.diffq:
         quantizer = DiffQuantizer(
             model, min_size=args.q_min_size, group_size=8)
@@ -243,7 +244,7 @@ def load_model(path, strict=False):
         warnings.simplefilter("ignore")
         load_from = path
         package = th.load(load_from, 'cpu')
-
+    
     klass = package["klass"]
     args = package["args"]
     kwargs = package["kwargs"]
