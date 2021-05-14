@@ -186,7 +186,7 @@ def main():
         # tempo change.
         samples = math.ceil(samples / (1 - 0.01 * args.max_tempo))
 
-    sources = 1
+    sources = 4
     if args.raw:
         train_set = Rawset(args.raw / "train",
                            samples=samples,
@@ -237,7 +237,7 @@ def main():
                                          output_device=th.cuda.current_device())
     else:
         dmodel = model
-
+    
     for epoch in range(len(saved.metrics), args.epochs):
         begin = time.time()
         model.train()

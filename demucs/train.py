@@ -43,6 +43,7 @@ def train_model(epoch,
         loader = DataLoader(dataset, batch_size=batch_size, num_workers=workers, shuffle=True)
     current_loss = 0
     model_size = 0
+
     for repetition in range(repeat):
         tq = tqdm.tqdm(loader,
                        ncols=120,
@@ -58,6 +59,7 @@ def train_model(epoch,
             sources = sources.to(device)
             sources = augment(sources)
             mix = sources.sum(dim=1)
+            sources = sources[:,:3].sum(dim=1).reshape(batch_size,1,2,-1)
 
             if quantizer is not None:
                 quantizer.last_example = sources
@@ -121,8 +123,8 @@ def validate_model(epoch,
         streams = dataset[index]
         # first five minutes to avoid OOM on --upsample models
         streams = streams[..., :15_000_000]
-        sourc = np.add(np.add(streams[1], streams[2]), streams[3]).reshape(1, 2, -1)
-        sourc = th.from_numpy(sourc).to(device)
+        sourc = streams[1:4].sum(dim=0).reshape(1,2,-1)
+        sourc = sourc.to(device)
         streams = streams.to(device)
         mixx = streams[0]
         estimates = apply_model(model, mixx, shifts=shifts, split=split, overlap=overlap)
