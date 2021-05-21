@@ -59,15 +59,25 @@ def train_model(epoch,
             sources = sources.to(device)
             sources = augment(sources)
             mix = sources.sum(dim=1)
-            sources = sources[:,:3].sum(dim=1).reshape(batch_size,1,2,-1)
+            accomp = sources[:,:3].sum(dim=1)
+            voc = sources[:,3]
+            if th.mean(voc) != 0:
+                voc = voc / th.mean(voc) * th.mean(accomp)
+            sources = th.cat((accomp.reshape(batch_size, 1, 2, -1), voc.reshape(batch_size, 1, 2, -1)), 1)
 
             if quantizer is not None:
                 quantizer.last_example = sources
             with th.autograd.set_detect_anomaly(False):
-                estimates = model(mix)
+                est_accomp = model(mix)
+                est_voc = center_trim(mix.reshape(batch_size, 1, 2, -1), est_accomp) - est_accomp
+                if th.mean(est_voc) != 0:
+                    est_voc = est_voc / th.mean(est_voc) * th.mean(est_accomp)
+                estimates = th.cat((est_accomp, est_voc), 1)
+
                 sources = center_trim(sources, estimates)
 
                 loss = criterion(estimates, sources)
+
                 model_size = 0
                 if quantizer is not None:
                     model_size = quantizer.model_size()
@@ -91,7 +101,7 @@ def train_model(epoch,
                            grad=f"{grad_norm:.5f}")
 
             # free some space before next round
-            del sources, mix, estimates, loss
+            del sources, mix, estimates, loss, accomp, voc, est_accomp, est_voc
 
         if world_size > 1:
             sampler.epoch += 1

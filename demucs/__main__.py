@@ -44,7 +44,7 @@ def main():
     name = get_name(parser, args)
     print(f"Experiment {name}")
 
-    # wandb.init(project="demucs-accomp")
+    wandb.init(project="demucs-accomp")
 
     if args.musdb is None and args.rank == 0:
         print(
@@ -260,7 +260,7 @@ def main():
             overlap=args.overlap,
             world_size=args.world_size)
 
-        # wandb.log({"train_loss": train_loss, "valid_loss": valid_loss})
+        wandb.log({"train_loss": train_loss, "valid_loss": valid_loss})
 
         ms = 0
         cms = 0
@@ -299,7 +299,7 @@ def main():
               f"cms={cms:.2f}MB "
               f"duration={human_seconds(duration)}")
 
-    # wandb.finish()
+    wandb.finish()
 
     del dmodel
     model.load_state_dict(saved.best_state)
